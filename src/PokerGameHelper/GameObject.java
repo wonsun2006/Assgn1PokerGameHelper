@@ -1,8 +1,9 @@
 package PokerGameHelper;
 
 class Player{
-	private Card[] cardDeck = new Card[7];
+	public Card[] cardDeck = new Card[7];
 	boolean isDead = false;
+	CardCombination myComb;
 	
 	void setCard(int i, Card card) {
 		this.cardDeck[i] = card;
@@ -18,12 +19,13 @@ class Player{
 		System.out.println("<Card lists>");		//Player의 카드 덱을 표시
 		for(int i=0; i<cardDeck.length; i++) {
 			if(cardDeck[i].isHidden==false && cardDeck[i]!=null)
-				System.out.print(cardDeck[i].toString());
+				System.out.println(cardDeck[i].toString());
 		}
 	}
 }
 
 class Card{
+	static Card[][] TotalDeck = new Card[4][13];
 	public static final String[] CardCharacter = {"SPADE", "DIAMOND", "HEART", "CLOVER"};
 	String character;
 	int number;
@@ -40,4 +42,16 @@ class Card{
 	public String toString() {
 		return character + " " + number;
 	}
+}
+
+class CardCombination {
+	int RoyalFlush = 0;
+	int StraightFlush = 0;
+	int FourOfAKind = 0;
+	int FullHouse = 0;
+	int Straight = 0;
+	int ThreeOfAKind = 0;
+	int TwoPair = 0;
+	int OnePair = 0;
+	Card HighCard;
 }

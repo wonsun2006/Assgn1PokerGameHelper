@@ -31,10 +31,9 @@ public class GameFlow {
 	}
 
 	public static void GameSet() {
-		Card[][] TotalDeck = new Card[4][13];
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 13; j++)
-				TotalDeck[i][j] = new Card(Card.CardCharacter[i], j + 1, false, false); // 전체 카드덱 설정
+				Card.TotalDeck[i][j] = new Card(Card.CardCharacter[i], j + 1, false, false); // 전체 카드덱 설정 (모양 idx 0~4, 숫자 idx 1~13)
 		
 	}
 
