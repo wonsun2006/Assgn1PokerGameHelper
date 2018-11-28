@@ -36,10 +36,15 @@ public class GameFlow {
 				Card.TotalDeck[i][j] = new Card(Card.CardCharacter[i], j + 1, false, false); // 전체 카드덱 설정 (모양 idx 0~4, 숫자 idx 1~13)
 		
 	}
+	
+
 
 	public static void main(String[] args) {
 		MainMenu();
 		GameSet();
 	}
 
-}
+}	
+class GameSource{
+		public static int leftDraw = 4;
+	}
