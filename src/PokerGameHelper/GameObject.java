@@ -1,5 +1,8 @@
 package PokerGameHelper;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 class Player {
 	public Card[] cardDeck = new Card[7];
 	boolean isDead = false;
@@ -18,27 +21,49 @@ class Player {
 
 		System.out.println("<Card lists>"); // Player의 카드 덱을 표시
 		for (int i = 0; i < cardDeck.length; i++) {
-			if (cardDeck[i].isHidden == false && cardDeck[i] != null) {
+			if (cardDeck[i] != null) {
 				System.out.println(cardDeck[i].toString());
 			}
 		}
 	}
 }
 
-class Card {
+class Card implements Comparable<Card>{
 	public static Card[][] TotalDeck = new Card[4][13];
 	public static final String[] CardCharacter = { "SPADE", "DIAMOND", "HEART", "CLOVER" };
-	String character;
-	int number;
-	boolean isHidden;
-	boolean isTaken;
+	String character;//카드 모양
+	int number;//카드 숫자
+	boolean isTaken;//카드가 플레이어에게 있는가를 판단
 	
-	Card(String character, int number, boolean isHidden, boolean isTaken) {
+	Card(String character, int number, boolean isTaken) {
 		this.character = character;
 		this.number = number;
-		this.isHidden = isHidden;
 		this.isTaken = isTaken;
+	}//카드 생성자
+	
+	public int compareTo(Card other) {
+		return character.compareTo(other.character);
 	}
+	
+	public static Comparator<Card> totalComparator = new Comparator<Card>() {
+		public int compare(Card card1, Card card2) {
+			int result=0;
+			if(Arrays.asList(Card.CardCharacter).indexOf(card1.character)
+				- Arrays.asList(Card.CardCharacter).indexOf(card2.character)==0) {
+				result=card1.number-card2.number;
+			} else {
+				result = Arrays.asList(Card.CardCharacter).indexOf(card1.character)
+				- Arrays.asList(Card.CardCharacter).indexOf(card2.character);
+			}
+			return result;
+		}
+	};//카드 비교 방식(편하게 정렬하기 위한 방식)
+	
+	public static Card[] sortedDeck(Card[] deck) {
+		Card[] instDeck = Arrays.copyOf(deck,deck.length);
+		Arrays.sort(instDeck, Card.totalComparator);
+		return instDeck;
+	} //카드를 스페이드,다이아,하트,클로버/숫자 순으로 정렬
 
 	public String toString() {
 		return character + " " + number;

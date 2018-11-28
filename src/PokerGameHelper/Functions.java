@@ -1,5 +1,9 @@
 package PokerGameHelper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Functions {
 	public static int max(int a, int b) {
 		return (a > b) ? a : b;
@@ -38,6 +42,10 @@ public class Functions {
 				if(instantDeck[i][j]==null)
 					num++;
 			}//필요한 카드수 세기
+			
+			if(num==0)
+				player.myComb.RoyalFlush=-1;//필요한 카드가 없다면 -1 반환 (이미 존재)
+			
 			if(num<GameSource.leftDraw) {
 				for(int j=0;j<5;j++) {
 					if(instantDeck[i][j]==null)
