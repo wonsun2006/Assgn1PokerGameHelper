@@ -6,7 +6,7 @@ import java.util.Comparator;
 class Player {
 	public Card[] cardDeck = new Card[7];
 	boolean isDead = false;
-	CardCombination myComb;
+	CardCombination myComb=new CardCombination();
 
 	void setCard(int i, Card card) {
 		this.cardDeck[i] = card;
@@ -25,6 +25,14 @@ class Player {
 				System.out.println(cardDeck[i].toString());
 			}
 		}
+	}
+	
+	void showCombinations() {
+		Functions.TotalCardCombination(this);
+		System.out.println(this.myComb.RoyalFlush);
+		System.out.println(this.myComb.StraightFlush);
+		
+		
 	}
 }
 
@@ -61,7 +69,7 @@ class Card implements Comparable<Card>{
 	
 	public static Card[] sortedDeck(Card[] deck) {
 		Card[] instDeck = Arrays.copyOf(deck,deck.length);
-		Arrays.sort(instDeck, Card.totalComparator);
+		Arrays.sort(instDeck,0,6-GameSource.leftDraw, Card.totalComparator);;
 		return instDeck;
 	} //카드를 스페이드,다이아,하트,클로버/숫자 순으로 정렬
 
@@ -79,6 +87,7 @@ class Card implements Comparable<Card>{
 }
 
 class CardCombination {
+	int TotalDeckCount = 0;
 	int RoyalFlush = 0;
 	int StraightFlush = 0;
 	int FourOfAKind = 0;

@@ -1,7 +1,5 @@
 package PokerGameHelper;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 public class GameFlow {
@@ -36,7 +34,6 @@ public class GameFlow {
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 13; j++)
 				Card.TotalDeck[i][j] = new Card(Card.CardCharacter[i], j + 1, false); // 전체 카드덱 설정 (모양 idx 0~4, 숫자 idx 0~12)
-		
 	}
 	
 
@@ -46,13 +43,16 @@ public class GameFlow {
 		GameSet();
 		Player pl1 = new Player();
 		Player pl2 = new Player();
-		for(int i=0; i<7; i++)
-			pl1.cardDeck[i]=Card.TotalDeck[(int)(Math.random()*4)][(int)(Math.random()*13)];
+		for(int i=0; i<4; i++)
+					pl1.cardDeck[i]=Card.TotalDeck[0][i+9];
+		pl1.cardDeck[4]=Card.TotalDeck[0][0];
+		
+
+//		for(int i=0; i<7; i++)
+//			pl1.cardDeck[i]=Card.TotalDeck[(int)(Math.random()*4)][(int)(Math.random()*13)];
 		pl1.showStats();
-		pl2.cardDeck=Card.sortedDeck(pl1.cardDeck);
-		pl1.showStats();
-		pl2.showStats();
-		System.out.println(pl1.cardDeck==pl2.cardDeck);
+		Functions.TotalCardCombination(pl1);
+		pl1.showCombinations();
 	}
 }
 

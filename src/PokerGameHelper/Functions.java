@@ -1,24 +1,44 @@
 package PokerGameHelper;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class Functions {
 	public static int max(int a, int b) {
-		return (a > b) ? a : b;
+		return (a > b) ? a : b;//더 큰 값 반환
+	}
+	
+	public static int fact(int a) {
+		if(a==1) return 1;
+		return a*fact(a-1);//팩토리얼
+	}
+	
+	public static int Combination(int n, int r) {
+		if(r==0) return 1;
+		else if(r==n) return 1;
+		else return Combination(n-1, r-1)+Combination(n-1, r);//중복 조합
+	}
+	
+	public static int countLeftDeck(Card[][] deck) {
+		int num=0;
+		for(int i=0; i<deck.length;i++) {
+			for(int j=0;j<deck[i].length;j++)
+				if(!(deck[i][j].isTaken))
+					num++;
+		}
+		return num;//남은 카드 장수 (전체 덱 버전)
 	}
 	
 	public static boolean searchCard(Player player, Card card) {
 		for(int i=0; i<player.cardDeck.length; i++) {
-			if(player.cardDeck[i].equals(card))
+			if(player.cardDeck[i]!=null&&player.cardDeck[i].equals(card))
 				return true;
 		}
-		return false;
+		return false;//개인 덱에서 카드 찾기
 	}
 	
 	public static void TotalCardCombination(Player player) {
+		player.myComb.TotalDeckCount=countLeftDeck(Card.TotalDeck);
 		RoyalFlushNum(player);
+		StraightFlushNum(player);
+		
 	} //전체 카드 조합들의 경우의 수 분석
 	
 	public static void RoyalFlushNum(Player player) {
@@ -37,29 +57,60 @@ public class Functions {
 		} //사용자의 덱에서 로열 플러쉬 조건 만족 카드 골라내기
 		
 		for(int i=0;i<4;i++) {
-			int num=0;
+			int available=0, num=0;
 			for(int j=0;j<5;j++) {
 				if(instantDeck[i][j]==null)
-					num++;
+					available++;
 			}//필요한 카드수 세기
+			num=available;
 			
-			if(num==0)
-				player.myComb.RoyalFlush=-1;//필요한 카드가 없다면 -1 반환 (이미 존재)
-			
-			if(num<GameSource.leftDraw) {
+			if(available==0) {
+				player.myComb.RoyalFlush=-1;
+				return; //필요한 카드가 없다면 -1 반환 (이미 존재)
+			}
+			if(available<GameSource.leftDraw) {
 				for(int j=0;j<5;j++) {
 					if(instantDeck[i][j]==null)
-						if(!(instantDeck[i][j].isTaken)) //필요 카드 가져갔는지 확인
-							num--;
+						if(!(Card.TotalDeck[i][(j+9)%13].isTaken)) //필요 카드 가져갔는지 확인
+							available--;
 				}
-				if(num==0)
-					player.myComb.RoyalFlush++; //로열 플러쉬 경우의 수 1개 증가
+				if(available==0)
+					player.myComb.RoyalFlush = Combination(GameSource.leftDraw, num); //로열 플러쉬 경우의 수 1개 증가
 			}//남은 드로우 수랑 맞을 때 실행
 		}
 	}
 	
 	public static void StraightFlushNum(Player player) {
-		
+		Card[] paramDeck = Card.sortedDeck(player.cardDeck);
+		int totalNum = 0;
+		for(int i=0; i<Card.CardCharacter.length;i++) {
+			for(int j=0;j<7-GameSource.leftDraw;j++) {
+				if(paramDeck[j].character!=Card.CardCharacter[i]) {
+					int[] instNum = new int[13];
+					for(int a=0; a<j-1; a++) {
+						instNum[paramDeck[a].number]=paramDeck[a].number;
+					}//있는 카드들 집어넣기
+					for(int a=0; a<10; a++) {
+						int num=0;
+						for(int b=0; b<5; b++) {
+							if(Card.TotalDeck[i][(a+b)%13].isTaken) {
+								num=-1;
+								break;
+							}
+							else if(instNum[(a+b)%13]!=(a+b)%13)
+								num++;
+						}
+						if(num==0) {
+							player.myComb.StraightFlush=-1;
+							return;
+						} else if(GameSource.leftDraw>num&&num>0) {
+							totalNum+=Combination(GameSource.leftDraw,num);
+						}
+					}//필요한 카드 수 구하기
+				}
+			}
+		}
+		player.myComb.StraightFlush+=(totalNum-player.myComb.RoyalFlush);
 	}
 	
 	public static void FourCardNum(Player player) {
