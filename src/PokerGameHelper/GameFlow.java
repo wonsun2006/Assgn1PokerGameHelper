@@ -42,7 +42,6 @@ public class GameFlow {
 //		MainMenu();
 		GameSet();
 		Player pl1 = new Player();
-		Player pl2 = new Player();
 		for(int i=0; i<4; i++)
 					pl1.cardDeck[i]=Card.TotalDeck[0][i+9];
 		pl1.cardDeck[4]=Card.TotalDeck[0][0];
