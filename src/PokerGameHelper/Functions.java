@@ -64,8 +64,8 @@ public class Functions {
 			num = available;
 
 			if (available == 0) {
-				player.myComb.RoyalFlush = -1;
-				return; // 필요한 카드가 없다면 -1 반환 (이미 존재)
+				player.myComb.RoyalFlush = "Exists";
+				return; // 필요한 카드가 없다면 반환 (이미 존재)
 			}
 			if (available < GameSource.leftDraw) {
 				for (int j = 0; j < 5; j++) {
@@ -74,7 +74,8 @@ public class Functions {
 							available--;
 				}
 				if (available == 0)
-					player.myComb.RoyalFlush = Combination(GameSource.leftDraw, num); // 로열 플러쉬 경우의 수 1개 증가
+					player.myComb.RoyalFlush = Integer.toString(Combination(GameSource.leftDraw, num)); // 로열 플러쉬 경우의 수
+																										// 1개 증가
 			} // 남은 드로우 수랑 맞을 때 실행
 		}
 	}
@@ -106,15 +107,17 @@ public class Functions {
 				}
 
 				if (num == 0) {
-					player.myComb.StraightFlush = -1;
+					player.myComb.StraightFlush = "Exists";
 					return;
 				} else if (GameSource.leftDraw >= num && num > 0) {
 					totalNum += Combination(GameSource.leftDraw, num);
 				}
 			} // 필요한 카드 수 구하기
 		}
-
-		player.myComb.StraightFlush += (totalNum - player.myComb.RoyalFlush);
+		if (!player.myComb.RoyalFlush.equals("Exists"))
+			player.myComb.StraightFlush = Integer.toString(totalNum - Integer.parseInt(player.myComb.RoyalFlush));
+		else
+			player.myComb.StraightFlush = Integer.toString(totalNum);//결과 반환 ("Exists" 값 처리 포함)
 	}
 
 	public static void FourCardNum(Player player) {

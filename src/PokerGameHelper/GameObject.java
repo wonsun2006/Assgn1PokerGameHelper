@@ -88,13 +88,13 @@ class Card implements Comparable<Card>{
 
 class CardCombination {
 	int TotalDeckCount = 0;
-	int RoyalFlush = 0;
-	int StraightFlush = 0;
-	int FourOfAKind = 0;
-	int FullHouse = 0;
-	int Straight = 0;
-	int ThreeOfAKind = 0;
-	int TwoPair = 0;
-	int OnePair = 0;
+	String RoyalFlush;
+	String StraightFlush;
+	String FourOfAKind;
+	String FullHouse;
+	String Straight;
+	String ThreeOfAKind;
+	String TwoPair;
+	String OnePair;
 	Card HighCard;
 }
