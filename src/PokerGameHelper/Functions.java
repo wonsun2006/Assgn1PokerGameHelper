@@ -1,5 +1,8 @@
 package PokerGameHelper;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Functions {
 	public static int max(int a, int b) {
 		return (a > b) ? a : b;// 더 큰 값 반환
@@ -83,6 +86,7 @@ public class Functions {
 
 	public static void StraightFlushNum(Player player) {
 		Card[] paramDeck = Card.sortedDeck(player.cardDeck);
+		List<Card> paramList = Arrays.asList(paramDeck);
 		int totalNum = 0;
 
 		for (int i = 0; i < Card.CardCharacter.length; i++) {
@@ -100,7 +104,7 @@ public class Functions {
 				int num = 0;
 
 				for (int b = 0; b < 5; b++) {
-					if (Card.TotalDeck[i][(a + b) % 13].isTaken) {
+					if (!(paramList.contains(Card.TotalDeck[i][(a+b)%13]))&&Card.TotalDeck[i][(a + b) % 13].isTaken) {
 						num = -1;
 						break;
 					} else if (instNum[(a + b) % 13] == 0)
@@ -123,23 +127,28 @@ public class Functions {
 
 	public static void FourCardNum(Player player) {
 		Card[] paramDeck = Card.numberFirstSortedDeck(player.cardDeck);
-		int index1 = 0, index2 = 0;
 		int totalNum = 0;
 		for (int i = 0; i < 13; i++) {
-			int need = 4;
-			Card[] instDeck = new Card[4];
-			if (paramDeck[index1].number == i + 1) {
-				instDeck[index2] = paramDeck[index1];
-				index1++;
-				index2++;
-				need--;
+			int need = 4, isSame = 4;
+			for (int j = 0; j < paramDeck.length; j++) {
+				if (paramDeck[j] == null)
+					break;
+				if (paramDeck[j].number == i + 1)
+					need--;
+			}
+
+			for (int j = 0; j < 4; j++) {
+				if (Card.TotalDeck[j][i].isTaken)
+					isSame--;
 			}
 			if (need == 0) {
 				player.myComb.FourCard = "Exists";
 				return;
-			} else if (need <= GameSource.leftDraw && need > 0) {
-				totalNum += Combination(GameSource.leftDraw, need);
 			}
+			if (need == isSame && need <= GameSource.leftDraw && need > 0) {
+				totalNum += Combination(countLeftDeck() - need, GameSource.leftDraw - need);
+			}
+
 		}
 		player.myComb.FourCard = Integer.toString(totalNum);
 	}
