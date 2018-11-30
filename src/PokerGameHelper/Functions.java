@@ -14,11 +14,11 @@ public class Functions {
 			return Combination(n - 1, r - 1) + Combination(n - 1, r);// 중복 조합
 	}
 
-	public static int countLeftDeck(Card[][] deck) {
+	public static int countLeftDeck() {
 		int num = 0;
-		for (int i = 0; i < deck.length; i++) {
-			for (int j = 0; j < deck[i].length; j++)
-				if (!(deck[i][j].isTaken))
+		for (int i = 0; i < Card.TotalDeck.length; i++) {
+			for (int j = 0; j < Card.TotalDeck[i].length; j++)
+				if (!(Card.TotalDeck[i][j].isTaken))
 					num++;
 		}
 		return num;// 남은 카드 장수 (전체 덱 버전)
@@ -34,11 +34,11 @@ public class Functions {
 
 	public static void TotalCardCombination(Player player) {
 		player.myComb = new CardCombination();
-		player.myComb.TotalDeckCount = countLeftDeck(Card.TotalDeck);
+		player.myComb.TotalDeckCount = countLeftDeck();
 		RoyalFlushNum(player);
 		StraightFlushNum(player);
 		FourCardNum(player);
-		
+
 	} // 전체 카드 조합들의 경우의 수 분석
 
 	public static void RoyalFlushNum(Player player) {
@@ -64,19 +64,19 @@ public class Functions {
 			} // 필요한 카드수 세기
 			num = available;
 
-			if (available == 0) {
+			if (num == 0) {
 				player.myComb.RoyalFlush = "Exists";
 				return; // 필요한 카드가 없다면 반환 (이미 존재)
 			}
-			if (available < GameSource.leftDraw) {
+			if (available <= GameSource.leftDraw) {
 				for (int j = 0; j < 5; j++) {
 					if (instantDeck[i][j] == null)
 						if (!(Card.TotalDeck[i][(j + 9) % 13].isTaken)) // 필요 카드 가져갔는지 확인
 							available--;
 				}
 				if (available == 0)
-					player.myComb.RoyalFlush = Integer.toString(Combination(GameSource.leftDraw, num)); // 로열 플러쉬 경우의 수
-																										// 1개 증가
+					player.myComb.RoyalFlush = Integer
+							.toString(Combination(countLeftDeck() - num, GameSource.leftDraw - num)); // 로열 플러쉬 경우의 수
 			} // 남은 드로우 수랑 맞을 때 실행
 		}
 	}
@@ -92,7 +92,7 @@ public class Functions {
 					break;
 
 			int[] instNum = new int[13];
-			for (int a = 0; a < index; a++) {
+			for (int a = 0; a < index + 1; a++) {
 				instNum[paramDeck[a].number - 1] = paramDeck[a].number;
 			} // 있는 카드들 집어넣기
 
@@ -111,38 +111,37 @@ public class Functions {
 					player.myComb.StraightFlush = "Exists";
 					return;
 				} else if (GameSource.leftDraw >= num && num > 0) {
-					totalNum += Combination(GameSource.leftDraw, num);
+					totalNum += Combination(countLeftDeck() - num, GameSource.leftDraw - num);
 				}
 			} // 필요한 카드 수 구하기
 		}
-		if (!player.myComb.RoyalFlush.equals("Exists"))
-			player.myComb.StraightFlush = Integer.toString(totalNum - Integer.parseInt(player.myComb.RoyalFlush));
-		else
+		if (player.myComb.RoyalFlush.equals("Exists"))
 			player.myComb.StraightFlush = Integer.toString(totalNum);// 결과 반환 ("Exists" 값 처리 포함)
+		else
+			player.myComb.StraightFlush = Integer.toString(totalNum - Integer.parseInt(player.myComb.RoyalFlush));
 	}
 
 	public static void FourCardNum(Player player) {
 		Card[] paramDeck = Card.numberFirstSortedDeck(player.cardDeck);
 		int index1 = 0, index2 = 0;
-		int totalNum=0;
+		int totalNum = 0;
 		for (int i = 0; i < 13; i++) {
 			int need = 4;
 			Card[] instDeck = new Card[4];
-			 if(paramDeck[index1].number == i + 1) {
+			if (paramDeck[index1].number == i + 1) {
 				instDeck[index2] = paramDeck[index1];
 				index1++;
 				index2++;
 				need--;
 			}
-			if(need==0) {
-				player.myComb.FourCard="Exists";
+			if (need == 0) {
+				player.myComb.FourCard = "Exists";
 				return;
+			} else if (need <= GameSource.leftDraw && need > 0) {
+				totalNum += Combination(GameSource.leftDraw, need);
 			}
-			else if(need<=GameSource.leftDraw && need>0) {
-				totalNum+=Combination(GameSource.leftDraw, need);
-			}	
 		}
-		player.myComb.FourCard=Integer.toString(totalNum);
+		player.myComb.FourCard = Integer.toString(totalNum);
 	}
 
 	public static void FullHouseNum(Player player) {
