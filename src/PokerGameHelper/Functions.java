@@ -41,6 +41,7 @@ public class Functions {
 		RoyalFlushNum(player);
 		StraightFlushNum(player);
 		FourCardNum(player);
+		FullHouseNum(player);
 
 	} // 전체 카드 조합들의 경우의 수 분석
 
@@ -104,7 +105,8 @@ public class Functions {
 				int num = 0;
 
 				for (int b = 0; b < 5; b++) {
-					if (!(paramList.contains(Card.TotalDeck[i][(a+b)%13]))&&Card.TotalDeck[i][(a + b) % 13].isTaken) {
+					if (!(paramList.contains(Card.TotalDeck[i][(a + b) % 13]))
+							&& Card.TotalDeck[i][(a + b) % 13].isTaken) {
 						num = -1;
 						break;
 					} else if (instNum[(a + b) % 13] == 0)
@@ -154,7 +156,64 @@ public class Functions {
 	}
 
 	public static void FullHouseNum(Player player) {
+		class NeedAvailable {
+			int need;
+			int available;
 
+			NeedAvailable(int need, int available) {
+				this.need = need;
+				this.available = available;
+			}
+		}
+
+		Card[] paramDeck = Card.sortedDeck(player.cardDeck);
+		NeedAvailable[] TripleCase = new NeedAvailable[13];
+		NeedAvailable[] PairCase = new NeedAvailable[13];
+		int totalNum = 0;
+
+		for (int i = 0; i < 13; i++) {
+			TripleCase[i] = new NeedAvailable(3, 4);
+			PairCase[i] = new NeedAvailable(2, 4);
+		} // 생성자 실행
+
+		for (int i = 0; i < 13; i++) {
+			for (int j = 0; j < paramDeck.length; j++) {
+				if (paramDeck[j].number == i + 1) {
+					TripleCase[i].need--;
+					PairCase[i].need--;
+				}
+			} // 페어 or 트리플 만들기 위해 필요한 카드 수
+
+			for (int a = 0; a < 13; a++) {
+				for (int b = 0; b < 4; b++) {
+					if (Card.TotalDeck[b][a].isTaken == true) {
+						TripleCase[a].available--;
+						PairCase[a].available--;
+					}
+				}
+			} // 숫자마다 뽑을 수 있는 카드 수
+		}
+
+		for (int i = 0; i < 13; i++) {
+			for (int j = 0; j < 13; j++) {
+				if (i != j) {
+					if (TripleCase[i].need <= 0 && PairCase[j].need <= 0) {
+						player.myComb.FullHouse = "Exists";
+						return;
+					}
+					if (TripleCase[i].need > TripleCase[i].available && PairCase[j].need > PairCase[j].available
+							&& TripleCase[i].available >= GameSource.leftDraw
+							&& PairCase[j].available >= GameSource.leftDraw
+							&& TripleCase[i].need + PairCase[j].need <= GameSource.leftDraw) {
+						totalNum += Combination(TripleCase[i].available, TripleCase[i].need)
+								* Combination(PairCase[j].available, PairCase[j].need)
+								* Combination(countLeftDeck() - TripleCase[i].need - PairCase[j].need,
+										GameSource.leftDraw - TripleCase[i].need - PairCase[j].need);
+					}
+				}
+			}
+		}
+		player.myComb.FullHouse = Integer.toString(totalNum);
 	}
 
 	public static void FlushNum(Player player) {
