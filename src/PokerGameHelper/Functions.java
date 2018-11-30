@@ -37,7 +37,8 @@ public class Functions {
 		player.myComb.TotalDeckCount = countLeftDeck(Card.TotalDeck);
 		RoyalFlushNum(player);
 		StraightFlushNum(player);
-
+		FourCardNum(player);
+		
 	} // 전체 카드 조합들의 경우의 수 분석
 
 	public static void RoyalFlushNum(Player player) {
@@ -117,11 +118,31 @@ public class Functions {
 		if (!player.myComb.RoyalFlush.equals("Exists"))
 			player.myComb.StraightFlush = Integer.toString(totalNum - Integer.parseInt(player.myComb.RoyalFlush));
 		else
-			player.myComb.StraightFlush = Integer.toString(totalNum);//결과 반환 ("Exists" 값 처리 포함)
+			player.myComb.StraightFlush = Integer.toString(totalNum);// 결과 반환 ("Exists" 값 처리 포함)
 	}
 
 	public static void FourCardNum(Player player) {
-		
+		Card[] paramDeck = Card.numberFirstSortedDeck(player.cardDeck);
+		int index1 = 0, index2 = 0;
+		int totalNum=0;
+		for (int i = 0; i < 13; i++) {
+			int need = 4;
+			Card[] instDeck = new Card[4];
+			 if(paramDeck[index1].number == i + 1) {
+				instDeck[index2] = paramDeck[index1];
+				index1++;
+				index2++;
+				need--;
+			}
+			if(need==0) {
+				player.myComb.FourCard="Exists";
+				return;
+			}
+			else if(need<=GameSource.leftDraw && need>0) {
+				totalNum+=Combination(GameSource.leftDraw, need);
+			}	
+		}
+		player.myComb.FourCard=Integer.toString(totalNum);
 	}
 
 	public static void FullHouseNum(Player player) {
