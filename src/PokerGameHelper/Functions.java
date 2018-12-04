@@ -55,7 +55,7 @@ public class Functions {
 
 		for (int i = 0; i < 13; i++) {
 			for (int j = 0; j < paramDeck.length; j++) {
-				if (paramDeck[j].number == i + 1)
+				if (paramDeck[j].number == i + 1 && TripleCase[i].need>0)
 					TripleCase[i].need--;
 			}
 		}
@@ -78,7 +78,7 @@ public class Functions {
 
 		for (int i = 0; i < 13; i++) {
 			for (int j = 0; j < paramDeck.length; j++) {
-				if (paramDeck[j].number == i + 1)
+				if (paramDeck[j].number == i + 1 && PairCase[i].need>0)
 					PairCase[i].need--;
 			}
 		}
@@ -178,6 +178,7 @@ public class Functions {
 				}
 			} // 필요한 카드 수 구하기
 		}
+		
 		if (player.myComb.RoyalFlush.equals("Exists"))
 			player.myComb.StraightFlush = Integer.toString(totalNum);// 결과 반환 ("Exists" 값 처리 포함)
 		else
@@ -213,7 +214,6 @@ public class Functions {
 	}
 
 	public static void FullHouseNum(Player player) {
-		Card[] paramDeck = Card.sortedDeck(player.cardDeck);
 		NeedAvailable[] TripleCase = TripleCase(player);
 		NeedAvailable[] PairCase = PairCase(player);
 		int totalNum = 0;
@@ -225,10 +225,8 @@ public class Functions {
 						player.myComb.FullHouse = "Exists";
 						return;
 					}
-					if (TripleCase[i].need >= TripleCase[i].available 
-							&& PairCase[j].need >= PairCase[j].available
-							&& TripleCase[i].available >= GameSource.leftDraw
-							&& PairCase[j].available >= GameSource.leftDraw
+					if (TripleCase[i].need <= TripleCase[i].available 
+							&& PairCase[j].need <= PairCase[j].available
 							&& TripleCase[i].need + PairCase[j].need <= GameSource.leftDraw) {
 						totalNum += (Combination(TripleCase[i].available, TripleCase[i].need)
 								* Combination(PairCase[j].available, PairCase[j].need)
