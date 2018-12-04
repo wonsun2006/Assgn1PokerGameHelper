@@ -213,7 +213,6 @@ public class Functions {
 	}
 
 	public static void FullHouseNum(Player player) {
-
 		Card[] paramDeck = Card.sortedDeck(player.cardDeck);
 		NeedAvailable[] TripleCase = TripleCase(player);
 		NeedAvailable[] PairCase = PairCase(player);
@@ -226,14 +225,15 @@ public class Functions {
 						player.myComb.FullHouse = "Exists";
 						return;
 					}
-					if (TripleCase[i].need > TripleCase[i].available && PairCase[j].need > PairCase[j].available
+					if (TripleCase[i].need >= TripleCase[i].available 
+							&& PairCase[j].need >= PairCase[j].available
 							&& TripleCase[i].available >= GameSource.leftDraw
 							&& PairCase[j].available >= GameSource.leftDraw
 							&& TripleCase[i].need + PairCase[j].need <= GameSource.leftDraw) {
-						totalNum += Combination(TripleCase[i].available, TripleCase[i].need)
+						totalNum += (Combination(TripleCase[i].available, TripleCase[i].need)
 								* Combination(PairCase[j].available, PairCase[j].need)
 								* Combination(countLeftDeck() - TripleCase[i].need - PairCase[j].need,
-										GameSource.leftDraw - TripleCase[i].need - PairCase[j].need);
+										GameSource.leftDraw - TripleCase[i].need - PairCase[j].need));
 					}
 				}
 			}
