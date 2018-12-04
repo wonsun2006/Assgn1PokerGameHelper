@@ -33,6 +33,7 @@ class Player {
 		System.out.println(this.myComb.StraightFlush);
 		System.out.println(this.myComb.FourCard);
 		System.out.println(this.myComb.FullHouse);
+		System.out.println(this.myComb.Flush);
 		
 	}
 }
@@ -112,6 +113,7 @@ class CardCombination {
 	String StraightFlush;
 	String FourCard;
 	String FullHouse;
+	String Flush;
 	String Straight;
 	String Triple;
 	String TwoPair;

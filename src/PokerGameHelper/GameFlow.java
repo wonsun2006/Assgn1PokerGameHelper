@@ -34,9 +34,16 @@ public class GameFlow {
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 13; j++)
 				Card.TotalDeck[i][j] = new Card(Card.CardCharacter[i], j + 1, false); // 전체 카드덱 설정 (모양 idx 0~4, 숫자 idx 0~12)
+//		GameSource.leftDraw = 6;//테스트를 위해 보류
 	}
 	
-
+	public static void PlayerGetCard(Player player, Card card) {
+		int i=0;
+		for(; player.cardDeck[i]!=null; i++) {
+		}
+		player.cardDeck[i]=card;
+		card.isTaken=true;
+	}
 
 	public static void main(String[] args) {
 //		MainMenu();

@@ -98,7 +98,8 @@ public class Functions {
 		StraightFlushNum(player);
 		FourCardNum(player);
 		FullHouseNum(player);
-
+		FlushNum(player);
+		
 	} // 전체 카드 조합들의 경우의 수 분석
 
 	public static void RoyalFlushNum(Player player) {
@@ -241,7 +242,42 @@ public class Functions {
 	}
 
 	public static void FlushNum(Player player) {
-
+		int[] playerCharNum = new int[4];
+		int[] totalCharNum = new int[4];
+		int totalNum=0;
+		for(int i=0; i<player.cardDeck.length;i++){
+		if(player.cardDeck[i]!=null){
+			if(player.cardDeck[i].character=="SPADE")
+				playerCharNum[0]++;
+			else if(player.cardDeck[i].character=="DIAMOND")
+				playerCharNum[1]++;
+			else if(player.cardDeck[i].character=="HEART")
+				playerCharNum[2]++;
+			else if(player.cardDeck[i].character=="CLOVER")
+				playerCharNum[3]++;
+		} else
+			break;
+		}//문양 개수 세기
+		for(int i=0; i<4; i++)
+			if(playerCharNum[i]>=5) {
+				player.myComb.Flush="Exists";
+				return;
+			}//이미 있는지 검사
+		
+		for(int i=0; i<4; i++) {
+			for(int j=0; j<13; j++) {
+				if(Card.TotalDeck[i][j].isTaken==false)
+					totalCharNum[i]++;
+			}
+		}//전체 덱에 뽑을 수 있는 카드 문양 별로 갯수 세기
+		
+		for(int i=0; i<4; i++) {
+			if(playerCharNum[i]<=GameSource.leftDraw&&totalCharNum[i]>=playerCharNum[i]) {
+				totalNum+=Combination(totalCharNum[i],playerCharNum[i])*Combination(countLeftDeck()-playerCharNum[i],GameSource.leftDraw-playerCharNum[i]);
+			}
+		}
+		totalNum-=(Integer.parseInt(player.myComb.RoyalFlush)+Integer.parseInt(player.myComb.StraightFlush));
+		player.myComb.Flush=Integer.toString(totalNum);
 	}
 
 	public static void StraightNum(Player player) {
