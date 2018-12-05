@@ -34,6 +34,7 @@ class Player {
 		System.out.println(this.myComb.FourCard);
 		System.out.println(this.myComb.FullHouse);
 		System.out.println(this.myComb.Flush);
+		System.out.println(this.myComb.Straight);
 		
 	}
 }

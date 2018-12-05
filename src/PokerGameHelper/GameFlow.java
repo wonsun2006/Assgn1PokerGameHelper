@@ -52,22 +52,22 @@ public class GameFlow {
 //		MainMenu();
 		GameSet();
 		Player pl1 = new Player();
-		/*
-		 * for(int i=0; i<4; i++) { pl1.cardDeck[i]=Card.TotalDeck[0][i+9];
-		 * Card.TotalDeck[0][i+9].isTaken=true; } 
-		 * pl1.cardDeck[4]=Card.TotalDeck[0][0];
-		 */
 
-		for (int i = 3; i < 7; i++) {
+		
+
+		for (int i = 0; i < 7; i++) {
 			pl1.cardDeck[i] = Card.TotalDeck[(int) (Math.random() * 4)][(int) (Math.random() * 13)];
 			pl1.cardDeck[i].isTaken = true;
 		}
-		pl1.cardDeck[0]=Card.TotalDeck[0][2];
-		pl1.cardDeck[0].isTaken=true;
-		pl1.cardDeck[1]=Card.TotalDeck[1][2];
-		pl1.cardDeck[1].isTaken=true;
-		pl1.cardDeck[2]=Card.TotalDeck[2][2];
-		pl1.cardDeck[2].isTaken=true;
+		
+		/*pl1.cardDeck[0] = Card.TotalDeck[0][7];
+		pl1.cardDeck[0].isTaken = true;
+		pl1.cardDeck[1] = Card.TotalDeck[1][7];
+		pl1.cardDeck[1].isTaken = true;
+		pl1.cardDeck[2] = Card.TotalDeck[2][7];
+		pl1.cardDeck[2].isTaken = true;*/
+		
+		
 		pl1.showStats();
 		Functions.TotalCardCombination(pl1);
 		pl1.showCombinations();
