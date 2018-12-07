@@ -105,7 +105,7 @@ public class Functions {
 			if (paramDeck[index] == null)
 				break;
 		paramDeck = Arrays.copyOf(paramDeck, index);
-		
+
 		for (int i = 0; i < 13; i++)
 			StraightCase[i] = new NeedAvailable(1, 4); // 생성자 실행
 
@@ -130,7 +130,10 @@ public class Functions {
 		FullHouseNum(player);
 		FlushNum(player);
 		StraightNum(player);
-
+		TripleNum(player);
+		TwoPairNum(player);
+		OnePairNum(player);
+		HighCard(player);
 	} // 전체 카드 조합들의 경우의 수 분석
 
 	public static void RoyalFlushNum(Player player) {
@@ -215,11 +218,7 @@ public class Functions {
 				}
 			} // 필요한 카드 수 구하기
 		}
-
-		if (player.myComb.RoyalFlush.equals("Exists"))
 			player.myComb.StraightFlush = Integer.toString(totalNum);// 결과 반환 ("Exists" 값 처리 포함)
-		else
-			player.myComb.StraightFlush = Integer.toString(totalNum - Integer.parseInt(player.myComb.RoyalFlush));
 	}
 
 	public static void FourCardNum(Player player) {
@@ -311,7 +310,6 @@ public class Functions {
 						* Combination(countLeftDeck() - playerCharNum[i], GameSource.leftDraw - playerCharNum[i]);
 			}
 		}
-		totalNum -= (Integer.parseInt(player.myComb.RoyalFlush) + Integer.parseInt(player.myComb.StraightFlush));
 		player.myComb.Flush = Integer.toString(totalNum);
 	}
 
@@ -345,18 +343,78 @@ public class Functions {
 	}
 
 	public static void TripleNum(Player player) {
-
+		NeedAvailable[] TripleCase = TripleCase(player);
+		int totalNum = 0;
+		
+		for (int i = 0; i < 13; i++) {
+			if (TripleCase[i].need <= 0) {
+				player.myComb.Triple = "Exists";
+				return;
+			} else if (TripleCase[i].need <= TripleCase[i].available && TripleCase[i].need <= GameSource.leftDraw)
+				totalNum += Combination(TripleCase[i].available, TripleCase[i].need)
+						* Combination(countLeftDeck() - TripleCase[i].need, GameSource.leftDraw - TripleCase[i].need);
+		}
+		player.myComb.Triple=Integer.toString(totalNum);
 	}
 
 	public static void TwoPairNum(Player player) {
+		NeedAvailable[] PairCase = PairCase(player);
+		int totalNum=0;
 
+		for(int i=0; i<13; i++) {
+			for(int j=0; j<13; j++) {
+				if(i!=j) {
+					if(PairCase[i].need<=0 && PairCase[j].need<=0) {
+						player.myComb.TwoPair="Exists";
+						return;
+					}else if(GameSource.leftDraw>=PairCase[i].need+PairCase[j].need) {
+						totalNum+=Combination(PairCase[i].available,PairCase[i].need)
+								*Combination(PairCase[j].available, PairCase[j].need)
+								*Combination(countLeftDeck()-PairCase[i].need-PairCase[j].need, GameSource.leftDraw-PairCase[i].need-PairCase[j].need);
+					}
+					
+				}
+			}
+		}
+		player.myComb.TwoPair=Integer.toString(totalNum);
 	}
 
 	public static void OnePairNum(Player player) {
-
+		NeedAvailable[] PairCase = PairCase(player);
+		int totalNum=0;
+		
+		for(int i=0; i<13; i++) {
+			if(PairCase[i].need<=0) {
+				player.myComb.OnePair="Exists";
+				return;
+			}else if(PairCase[i].need<=GameSource.leftDraw) {
+				totalNum+=Combination(PairCase[i].available, PairCase[i].need)
+						*Combination(countLeftDeck()-PairCase[i].need, GameSource.leftDraw-PairCase[i].need);
+			}
+		}
+		player.myComb.OnePair=Integer.toString(totalNum);
 	}
 
 	public static void HighCard(Player player) {
-
+		if(searchCard(player,Card.TotalDeck[0][0])) {
+			player.myComb.HighCard=Card.TotalDeck[0][0].toString();
+			return;
+		}else if(searchCard(player,Card.TotalDeck[1][0])) {
+			player.myComb.HighCard=Card.TotalDeck[1][0].toString();
+			return;
+		}else if(searchCard(player,Card.TotalDeck[2][0])) {
+			player.myComb.HighCard=Card.TotalDeck[2][0].toString();
+			return;
+		}else if(searchCard(player,Card.TotalDeck[3][0])) {
+			player.myComb.HighCard=Card.TotalDeck[3][0].toString();
+			return;
+		}
+		
+		for(int i=1;i<13;i++) {
+			for(int j=3; j>=0; j--) {
+				if(searchCard(player,Card.TotalDeck[j][i]))
+					player.myComb.HighCard=Card.TotalDeck[j][i].toString();
+			}
+		}
 	}
 }

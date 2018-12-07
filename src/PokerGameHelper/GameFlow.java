@@ -55,7 +55,7 @@ public class GameFlow {
 
 		
 
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 3; i++) {
 			pl1.cardDeck[i] = Card.TotalDeck[(int) (Math.random() * 4)][(int) (Math.random() * 13)];
 			pl1.cardDeck[i].isTaken = true;
 		}
@@ -67,7 +67,7 @@ public class GameFlow {
 		pl1.cardDeck[2] = Card.TotalDeck[2][7];
 		pl1.cardDeck[2].isTaken = true;*/
 		
-		
+		pl1.cardDeck=Card.sortedDeck(pl1.cardDeck);
 		pl1.showStats();
 		Functions.TotalCardCombination(pl1);
 		pl1.showCombinations();

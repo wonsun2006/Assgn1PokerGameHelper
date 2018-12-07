@@ -35,7 +35,10 @@ class Player {
 		System.out.println(this.myComb.FullHouse);
 		System.out.println(this.myComb.Flush);
 		System.out.println(this.myComb.Straight);
-		
+		System.out.println(this.myComb.Triple);
+		System.out.println(this.myComb.TwoPair);
+		System.out.println(this.myComb.OnePair);
+		System.out.println(this.myComb.HighCard);		
 	}
 }
 
@@ -85,7 +88,7 @@ class Card implements Comparable<Card>{
 	
 	public static Card[] sortedDeck(Card[] deck) {
 		Card[] instDeck = Arrays.copyOf(deck,deck.length);
-		Arrays.sort(instDeck,0,6-GameSource.leftDraw, Card.totalComparator);;
+		Arrays.sort(instDeck,0,6-GameSource.leftDraw, Card.totalComparator);
 		return instDeck;
 	} //카드를 스페이드,다이아,하트,클로버/숫자 순으로 정렬
 	
@@ -119,5 +122,5 @@ class CardCombination {
 	String Triple;
 	String TwoPair;
 	String OnePair;
-	Card HighCard;
+	String HighCard;
 }
