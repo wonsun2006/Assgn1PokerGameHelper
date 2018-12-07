@@ -61,46 +61,42 @@ class Card implements Comparable<Card>{
 	
 	public static Comparator<Card> totalComparator = new Comparator<Card>() {
 		public int compare(Card card1, Card card2) {
-			int result=0;
 			if(Arrays.asList(Card.CardCharacter).indexOf(card1.character)
-				- Arrays.asList(Card.CardCharacter).indexOf(card2.character)==0) {
-				result=card1.number-card2.number;
+				!=Arrays.asList(Card.CardCharacter).indexOf(card2.character)) {
+				return Arrays.asList(Card.CardCharacter).indexOf(card1.character)
+						- Arrays.asList(Card.CardCharacter).indexOf(card2.character);
 			} else {
-				result = Arrays.asList(Card.CardCharacter).indexOf(card1.character)
-				- Arrays.asList(Card.CardCharacter).indexOf(card2.character);
+				return card1.number-card2.number;
 			}
-			return result;
 		}
 	};//카드 비교 방식(문자 우열/ 숫자 오름차순)
 	
 	public static Comparator<Card> numberFirstComparator = new Comparator<Card>() {
 		public int compare(Card card1, Card card2) {
-			int result=0;
-			if(card1.number==card2.number) {
-				result=Arrays.asList(Card.CardCharacter).indexOf(card1.character)
+			if(card1.number!=card2.number)
+				return card1.number-card2.number;
+			else {
+				return Arrays.asList(Card.CardCharacter).indexOf(card1.character)
 						- Arrays.asList(Card.CardCharacter).indexOf(card2.character);
-			} else {
-				result = card1.number-card2.number;
-			}
-			return result;
+			} 
 		}
 	};//카드 비교 방식(편하게 정렬하기 위한 방식)
 	
 	public static Card[] sortedDeck(Card[] deck) {
 		Card[] instDeck = Arrays.copyOf(deck,deck.length);
-		Arrays.sort(instDeck,0,6-GameSource.leftDraw, Card.totalComparator);
+		Arrays.sort(instDeck,0,7-GameSource.leftDraw, Card.totalComparator);
 		return instDeck;
 	} //카드를 스페이드,다이아,하트,클로버/숫자 순으로 정렬
 	
 	public static Card[] numberFirstSortedDeck(Card[] deck) {
 		Card[] instDeck = Arrays.copyOf(deck,deck.length);
-		Arrays.sort(instDeck,0,6-GameSource.leftDraw, Card.numberFirstComparator);;
+		Arrays.sort(instDeck,0,7-GameSource.leftDraw, Card.numberFirstComparator);;
 		return instDeck;
 	} //카드를 스페이드,다이아,하트,클로버/숫자 순으로 정렬
 
 	public String toString() {
 		return character + " " + number;
-	}
+	}	//카드 문자와 숫자를 문자열로 표현
 	
 	public boolean equals(Card card) {
 		if(character.equals(card.character)&&number==card.number)

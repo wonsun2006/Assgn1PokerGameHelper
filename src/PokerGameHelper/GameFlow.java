@@ -60,14 +60,15 @@ public class GameFlow {
 			pl1.cardDeck[i].isTaken = true;
 		}
 		
-		/*pl1.cardDeck[0] = Card.TotalDeck[0][7];
+	/*	pl1.cardDeck[0] = Card.TotalDeck[2][1];
 		pl1.cardDeck[0].isTaken = true;
-		pl1.cardDeck[1] = Card.TotalDeck[1][7];
+		pl1.cardDeck[1] = Card.TotalDeck[2][0];
 		pl1.cardDeck[1].isTaken = true;
-		pl1.cardDeck[2] = Card.TotalDeck[2][7];
+		pl1.cardDeck[2] = Card.TotalDeck[2][12];
 		pl1.cardDeck[2].isTaken = true;*/
 		
-		pl1.cardDeck=Card.sortedDeck(pl1.cardDeck);
+//		pl1.cardDeck=Card.sortedDeck(pl1.cardDeck);
+		pl1.cardDeck=Card.numberFirstSortedDeck(pl1.cardDeck);
 		pl1.showStats();
 		Functions.TotalCardCombination(pl1);
 		pl1.showCombinations();

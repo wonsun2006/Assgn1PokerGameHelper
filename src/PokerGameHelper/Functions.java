@@ -190,11 +190,11 @@ public class Functions {
 		for (int i = 0; i < Card.CardCharacter.length; i++) {
 			int index;
 			for (index = 0; index < 7 - GameSource.leftDraw; index++)
-				if (paramDeck[index].character != Card.CardCharacter[i])
+				if (!(paramDeck[index].character.equals(Card.CardCharacter[i])))
 					break;
 
 			int[] instNum = new int[13];
-			for (int a = 0; a < index + 1; a++) {
+			for (int a = 0; a < index; a++) {
 				instNum[paramDeck[a].number - 1] = paramDeck[a].number;
 			} // 있는 카드들 집어넣기
 
@@ -305,9 +305,9 @@ public class Functions {
 		} // 전체 덱에 뽑을 수 있는 카드 문양 별로 갯수 세기
 
 		for (int i = 0; i < 4; i++) {
-			if (playerCharNum[i] <= GameSource.leftDraw && totalCharNum[i] >= playerCharNum[i]) {
-				totalNum += Combination(totalCharNum[i], playerCharNum[i])
-						* Combination(countLeftDeck() - playerCharNum[i], GameSource.leftDraw - playerCharNum[i]);
+			if (5-playerCharNum[i] <= GameSource.leftDraw && totalCharNum[i] >= playerCharNum[i]) {
+				totalNum += Combination(totalCharNum[i], 5-playerCharNum[i])
+						* Combination(countLeftDeck() - (5-playerCharNum[i]), GameSource.leftDraw - (5-playerCharNum[i]));
 			}
 		}
 		player.myComb.Flush = Integer.toString(totalNum);
