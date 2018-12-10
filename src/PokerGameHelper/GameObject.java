@@ -29,7 +29,7 @@ class Player {
 	
 	void showCombinations() {
 		Functions.TotalCardCombination(this);
-		System.out.println(this.myComb.RoyalFlush);
+		System.out.println("로열 스트레이트 플러쉬: "+this.myComb.RoyalFlush);
 		System.out.println(this.myComb.StraightFlush);
 		System.out.println(this.myComb.FourCard);
 		System.out.println(this.myComb.FullHouse);

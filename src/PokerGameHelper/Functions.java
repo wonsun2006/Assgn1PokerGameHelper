@@ -1,20 +1,21 @@
 package PokerGameHelper;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
+import javax.swing.*;
 
 public class Functions {
 	public static void GameSet() {
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 13; j++)
 				Card.TotalDeck[i][j] = new Card(Card.CardCharacter[i], j + 1, false); // 전체 카드덱 설정 (모양 idx 0~4, 숫자 idx 0~12)
-//		GameSource.leftDraw = 6;//테스트를 위해 보류
 	}
 	
 	public static void PlayerSet(int number) {
-		Player[] player = new Player[number];
+		GameSource.player = new Player[number];
 		for(int i=0; i<number; i++)
-			player[i]=new Player();
+			GameSource.player[i]=new Player();
 	}
 
 	public static void PlayerGetCard(Player player, Card card) {
@@ -24,8 +25,14 @@ public class Functions {
 		card.isTaken = true;
 	}
 	
-	public static int max(int a, int b) {
-		return (a > b) ? a : b;// 더 큰 값 반환
+	public static void showSimpleCard(Player player, Container c) {
+		int i = 0;
+		for (; player.cardDeck[i] != null; i++);
+		for(int j=0; j<i && j<player.cardDeck.length; j++) {
+			JLabel label = new JLabel(player.cardDeck[j].character+"\n"+player.cardDeck[j].number);
+			label.setSize(100,150);
+			c.add(label);
+		}
 	}
 
 	public static int Combination(int n, int r) {
