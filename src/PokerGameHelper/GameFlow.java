@@ -167,6 +167,8 @@ public class GameFlow {
 					if (b.equals(Buttons[0])) {
 						new InsertCard(GameSource.player);
 					} else if (b.equals(Buttons[1])) {
+						Functions.TotalCardCombination(GameSource.player[GameSource.playeridx]);
+						new CombinationCase();
 						// 경우의 수 출력
 					} else if (b.equals(Buttons[2])) {
 						// 전체 상황
@@ -263,11 +265,26 @@ public class GameFlow {
 			}
 
 			public static class CombinationCase extends JFrame {
+				
 				public CombinationCase() {
 					setTitle("Cases");
 					setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					Container c = getContentPane();
-
+					JTextField text = new JTextField(" 로열 스트레이트 플러쉬: "+GameSource.player[GameSource.playeridx].myComb.RoyalFlush
+						+ "\n"+" 스트레이트 플러쉬: "+GameSource.player[GameSource.playeridx].myComb.StraightFlush
+						+ "\n"+" 포카드: "+GameSource.player[GameSource.playeridx].myComb.FourCard
+						+ "\n"+" 풀하우스: "+GameSource.player[GameSource.playeridx].myComb.FullHouse
+						+ "\n"+" 플러쉬: "+GameSource.player[GameSource.playeridx].myComb.Flush
+						+ "\n"+" 스트레이트: "+GameSource.player[GameSource.playeridx].myComb.Straight
+						+ "\n"+" 트리플: "+GameSource.player[GameSource.playeridx].myComb.Triple
+						+ "\n"+" 투 페어: "+GameSource.player[GameSource.playeridx].myComb.TwoPair
+						+ "\n"+" 원 페어: "+GameSource.player[GameSource.playeridx].myComb.OnePair
+						+ "\n"+" 하이 카드: "+GameSource.player[GameSource.playeridx].myComb.HighCard);
+					text.setFont(new Font("Gulim", Font.PLAIN, 15));
+					text.setEditable(false);
+					
+					c.add(text);
+					
 					setSize(900, 600);
 					setVisible(true);
 				}
