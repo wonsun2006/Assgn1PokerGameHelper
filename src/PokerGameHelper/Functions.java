@@ -4,6 +4,26 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Functions {
+	public static void GameSet() {
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 13; j++)
+				Card.TotalDeck[i][j] = new Card(Card.CardCharacter[i], j + 1, false); // 전체 카드덱 설정 (모양 idx 0~4, 숫자 idx 0~12)
+//		GameSource.leftDraw = 6;//테스트를 위해 보류
+	}
+	
+	public static void PlayerSet(int number) {
+		Player[] player = new Player[number];
+		for(int i=0; i<number; i++)
+			player[i]=new Player();
+	}
+
+	public static void PlayerGetCard(Player player, Card card) {
+		int i = 0;
+		for (; player.cardDeck[i] != null; i++);
+		player.cardDeck[i] = card;
+		card.isTaken = true;
+	}
+	
 	public static int max(int a, int b) {
 		return (a > b) ? a : b;// 더 큰 값 반환
 	}
@@ -24,7 +44,7 @@ public class Functions {
 				if (!(Card.TotalDeck[i][j].isTaken))
 					num++;
 		}
-		return num;// 남은 카드 장수 (전체 덱 버전)
+		return num-GameSource.Hidden;// 남은 카드 장수 (전체 덱 버전)
 	}
 
 	public static boolean searchCard(Player player, Card card) {
