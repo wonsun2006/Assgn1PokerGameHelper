@@ -2,10 +2,6 @@ package PokerGameHelper;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import javax.swing.*;
 
 public class GameFlow {
@@ -24,12 +20,12 @@ public class GameFlow {
 			button1.addActionListener(listener);
 			button2.addActionListener(listener);
 			button3.addActionListener(listener);
-			button1.setSize(300,150);
-			button1.setLocation(600,225);
-			button2.setSize(300,150);
-			button2.setLocation(600,425);
-			button3.setSize(300,150);
-			button3.setLocation(600,625);
+			button1.setSize(600,100);
+			button1.setLocation(450,300);
+			button2.setSize(600,100);
+			button2.setLocation(450,450);
+			button3.setSize(600,100);
+			button3.setLocation(450,600);
 
 			c.add(button1);
 			c.add(button2);
