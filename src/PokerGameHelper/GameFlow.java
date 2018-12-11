@@ -2,6 +2,10 @@ package PokerGameHelper;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import javax.swing.*;
 
 public class GameFlow {
@@ -14,13 +18,18 @@ public class GameFlow {
 			setTitle("MainMenu");
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			Container c = getContentPane();
-			c.setLayout(new FlowLayout());
-
+			c.setLayout(null);
 			MenuButtonListener listener = new MenuButtonListener();
 
 			button1.addActionListener(listener);
 			button2.addActionListener(listener);
 			button3.addActionListener(listener);
+			button1.setSize(300,150);
+			button1.setLocation(600,225);
+			button2.setSize(300,150);
+			button2.setLocation(600,425);
+			button3.setSize(300,150);
+			button3.setLocation(600,625);
 
 			c.add(button1);
 			c.add(button2);
@@ -136,8 +145,7 @@ public class GameFlow {
 			static JLabel TurnNum = new JLabel("첫번째 턴");
 			static JLabel playerName = new JLabel("자신");
 			static final String[] TurnOrder = { "첫", "두", "세", "네", "다섯", "여섯", "일곱"};
-			static JButton[] Buttons = { new JButton("카드 입력"), new JButton("경우의 수"), new JButton("전체 상황"),
-					new JButton("게임 포기") };
+			static JButton[] Buttons = { new JButton("카드 입력"), new JButton("경우의 수"), new JButton("전체 상황"), new JButton("게임 포기") };
 
 			public GameStart(int number) {
 				setTitle("Game");
@@ -171,9 +179,40 @@ public class GameFlow {
 						new CombinationCase();
 						// 경우의 수 출력
 					} else if (b.equals(Buttons[2])) {
+						new TotalStats();
 						// 전체 상황
 					} else if (b.equals(Buttons[3])) {
-						// 게임 포기
+						GameSource.player[GameSource.playeridx].isDead=true;
+						GameSource.DeadPlayer++;
+						if(GameSource.playeridx==0) {
+							JOptionPane.showMessageDialog(null, "게임이 종료되었습니다.", "Message", NORMAL);
+							System.exit(0);
+						}else {
+							do {
+								if(GameSource.DeadPlayer>=GameSource.player.length-1&&GameSource.player.length!=1) {
+									JOptionPane.showMessageDialog(null, "게임이 종료되었습니다.", "Message", NORMAL);
+									System.exit(0);
+								}
+								if (GameSource.playeridx == GameSource.player.length-1) {
+									if(GameSource.leftDraw==1) {
+										JOptionPane.showMessageDialog(null, "게임이 종료되었습니다.", "Message", NORMAL);
+										System.exit(0);
+										return;
+									}else {
+										GameSource.playeridx = 0;
+										GameSource.leftDraw--;
+										TurnNum.setText(TurnOrder[7 - GameSource.leftDraw] + "번째 턴");
+										playerName.setText("자신");
+									}
+								}
+								else {
+									if (GameSource.playeridx < GameSource.player.length) {
+										GameSource.playeridx++;
+										playerName.setText("다른 플레이어" + GameSource.playeridx);
+									}
+								}
+							}while(GameSource.player[GameSource.playeridx].isDead);
+						}	// 게임 포기
 					}
 				}
 			}
@@ -205,28 +244,31 @@ public class GameFlow {
 									JOptionPane.showMessageDialog(null, "이미 가져간 카드입니다.\n 다른 카드를 선택하세요.", "Message", JOptionPane.ERROR_MESSAGE);
 									return;
 								}
-								if (GameSource.playeridx == player.length-1) {
-									Functions.PlayerGetCard(player[GameSource.playeridx],
-											Card.TotalDeck[characteridx][numberidx]);
-									if(GameSource.leftDraw==1) {
+								Functions.PlayerGetCard(player[GameSource.playeridx], Card.TotalDeck[characteridx][numberidx]);
+								do {
+									if(GameSource.DeadPlayer>=GameSource.player.length-1&&GameSource.player.length!=1) {
 										JOptionPane.showMessageDialog(null, "게임이 종료되었습니다.", "Message", NORMAL);
 										System.exit(0);
-										return;
-									}else {
-									GameSource.playeridx = 0;
-									GameSource.leftDraw--;
-									TurnNum.setText(TurnOrder[7 - GameSource.leftDraw] + "번째 턴");
-									playerName.setText("자신");
 									}
-								}
-								else {
-									Functions.PlayerGetCard(player[GameSource.playeridx],
-											Card.TotalDeck[characteridx][numberidx]);
-									if (GameSource.playeridx < player.length) {
-										GameSource.playeridx++;
-										playerName.setText("다른 플레이어" + GameSource.playeridx);
+									if (GameSource.playeridx == player.length-1) {
+										if(GameSource.leftDraw==1) {
+											JOptionPane.showMessageDialog(null, "게임이 종료되었습니다.", "Message", NORMAL);
+											System.exit(0);
+											return;
+										}else {
+											GameSource.playeridx = 0;
+											GameSource.leftDraw--;
+											TurnNum.setText(TurnOrder[7 - GameSource.leftDraw] + "번째 턴");
+											playerName.setText("자신");
+										}
 									}
-								}
+									else {
+										if (GameSource.playeridx < player.length) {
+											GameSource.playeridx++;
+											playerName.setText("다른 플레이어" + GameSource.playeridx);
+										}
+									}
+								} while(GameSource.player[GameSource.playeridx].isDead);
 								dispose();
 							}
 						}
@@ -265,25 +307,42 @@ public class GameFlow {
 			}
 
 			public static class CombinationCase extends JFrame {
-				
+				JLabel arrow = new JLabel("->");
+				JTextArea probability = new JTextArea();
 				public CombinationCase() {
 					setTitle("Cases");
-					setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					Container c = getContentPane();
-					JTextField text = new JTextField(" 로열 스트레이트 플러쉬: "+GameSource.player[GameSource.playeridx].myComb.RoyalFlush
-						+ "\n"+" 스트레이트 플러쉬: "+GameSource.player[GameSource.playeridx].myComb.StraightFlush
-						+ "\n"+" 포카드: "+GameSource.player[GameSource.playeridx].myComb.FourCard
-						+ "\n"+" 풀하우스: "+GameSource.player[GameSource.playeridx].myComb.FullHouse
-						+ "\n"+" 플러쉬: "+GameSource.player[GameSource.playeridx].myComb.Flush
-						+ "\n"+" 스트레이트: "+GameSource.player[GameSource.playeridx].myComb.Straight
-						+ "\n"+" 트리플: "+GameSource.player[GameSource.playeridx].myComb.Triple
-						+ "\n"+" 투 페어: "+GameSource.player[GameSource.playeridx].myComb.TwoPair
-						+ "\n"+" 원 페어: "+GameSource.player[GameSource.playeridx].myComb.OnePair
-						+ "\n"+" 하이 카드: "+GameSource.player[GameSource.playeridx].myComb.HighCard);
+					c.setLayout(new FlowLayout()
+							);
+					
+					JTextArea text = new JTextArea(" 로열 스트레이트 플러쉬: "+GameSource.player[GameSource.playeridx].myComb.RoyalFlush
+						+ "\n 스트레이트 플러쉬: "+GameSource.player[GameSource.playeridx].myComb.StraightFlush
+						+ "\n 포카드: "+GameSource.player[GameSource.playeridx].myComb.FourCard
+						+ "\n 풀하우스: "+GameSource.player[GameSource.playeridx].myComb.FullHouse
+						+ "\n 플러쉬: "+GameSource.player[GameSource.playeridx].myComb.Flush
+						+ "\n 스트레이트: "+GameSource.player[GameSource.playeridx].myComb.Straight
+						+ "\n 트리플: "+GameSource.player[GameSource.playeridx].myComb.Triple
+						+ "\n 투 페어: "+GameSource.player[GameSource.playeridx].myComb.TwoPair
+						+ "\n 원 페어: "+GameSource.player[GameSource.playeridx].myComb.OnePair
+						+ "\n 하이 카드: "+GameSource.player[GameSource.playeridx].myComb.HighCard);
 					text.setFont(new Font("Gulim", Font.PLAIN, 15));
 					text.setEditable(false);
+					probability.setFont(new Font("Gulim", Font.PLAIN, 15));
+					probability.setEditable(false);
+					probability.setText(" 로열 스트레이트 플러쉬: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.RoyalFlush)
+							+ "%\n 스트레이트 플러쉬: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.StraightFlush)
+							+ "%\n 포카드: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.FourCard)
+							+ "%\n 풀하우스: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.FullHouse)
+							+ "%\n 플러쉬: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.Flush)
+							+ "%\n 스트레이트: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.Straight)
+							+ "%\n 트리플: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.Triple)
+							+ "%\n 투 페어: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.TwoPair)
+							+ "%\n 원 페어: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.OnePair)
+							+"%");
 					
 					c.add(text);
+					c.add(arrow);
+					c.add(probability);
 					
 					setSize(900, 600);
 					setVisible(true);
@@ -291,38 +350,38 @@ public class GameFlow {
 			}
 
 			public static class TotalStats extends JFrame {
+				JTextArea[] playerStats=new JTextArea[GameSource.player.length];
 				public TotalStats() {
 					setTitle("Stats");
-					setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					Container c = getContentPane();
-
-					setSize(900, 600);
-					setVisible(true);
-				}
-			}
-
-			public static class ExitGame extends JFrame {
-				public ExitGame() {
-					setTitle("Exit");
-					setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					Container c = getContentPane();
+					c.setLayout(new FlowLayout());
+					
+					for(int i=0; i<GameSource.player.length;i++) {
+						if(i==0) {
+							playerStats[i]=new JTextArea("[자신]\n"+GameSource.player[i].Stats());
+						}else {
+							playerStats[i]=new JTextArea("[다른 플레이어"+i+"]\n"+GameSource.player[i].Stats());
+						}
+						playerStats[i].setFont(new Font("Gulim", Font.PLAIN, 15));
+						playerStats[i].setEditable(false);
+						c.add(playerStats[i]);
+					}
 
 					setSize(900, 600);
 					setVisible(true);
 				}
 			}
 		}
-
 	}
 
 	public static void main(String[] args) {
 		new MainMenu();
-
 	}
 }
 
 class GameSource {
 	public static int playeridx = 0;
+	public static int DeadPlayer = 0;
 	public static Player[] player;
 	public static int leftDraw = 7;
 	public static int Hidden = 0;

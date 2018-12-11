@@ -11,7 +11,22 @@ class Player {
 	void setCard(int i, Card card) {
 		this.cardDeck[i] = card;
 	}
-
+	
+	String Stats() {
+		String isDeadString;
+		if (isDead == false)
+			isDeadString="alive";
+		else
+			isDeadString="dead";
+		String result="";
+		for (int i = 0; i < cardDeck.length; i++) {
+			if (cardDeck[i] != null) {
+				result+=(cardDeck[i].toString()+"\n");
+			}
+		}
+		return result;
+	}
+	
 	void showStats() {
 		System.out.print("Player Status: "); // Player의 생존 유무를 표시
 		if (isDead == false)
@@ -25,20 +40,6 @@ class Player {
 				System.out.println(cardDeck[i].toString());
 			}
 		}
-	}
-	
-	void showCombinations() {
-		Functions.TotalCardCombination(this);
-		System.out.println("로열 스트레이트 플러쉬: "+this.myComb.RoyalFlush);
-		System.out.println(this.myComb.StraightFlush);
-		System.out.println(this.myComb.FourCard);
-		System.out.println(this.myComb.FullHouse);
-		System.out.println(this.myComb.Flush);
-		System.out.println(this.myComb.Straight);
-		System.out.println(this.myComb.Triple);
-		System.out.println(this.myComb.TwoPair);
-		System.out.println(this.myComb.OnePair);
-		System.out.println(this.myComb.HighCard);		
 	}
 }
 

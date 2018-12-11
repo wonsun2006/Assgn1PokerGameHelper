@@ -162,6 +162,12 @@ public class Functions {
 		OnePairNum(player);
 		HighCard(player);
 	} // 전체 카드 조합들의 경우의 수 분석
+	
+	public static String probability(String i) {
+		if(i.equals("Exists"))
+			return "100";
+		return String.format("%.15f",((double)Integer.parseInt(i))/Combination(countLeftDeck(),GameSource.leftDraw));
+	}
 
 	public static void RoyalFlushNum(Player player) {
 		Card[][] instantDeck = new Card[4][5];
