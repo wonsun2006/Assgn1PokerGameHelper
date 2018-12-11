@@ -24,16 +24,6 @@ public class Functions {
 		player.cardDeck[i] = card;
 		card.isTaken = true;
 	}
-	
-	public static void showSimpleCard(Player player, Container c) {
-		int i = 0;
-		for (; player.cardDeck[i] != null; i++);
-		for(int j=0; j<i && j<player.cardDeck.length; j++) {
-			JLabel label = new JLabel(player.cardDeck[j].character+"\n"+player.cardDeck[j].number);
-			label.setSize(100,150);
-			c.add(label);
-		}
-	}
 
 	public static int Combination(int n, int r) {
 		if (r == 0)

@@ -159,17 +159,16 @@ public class GameFlow {
 				
 				TurnNum.setFont(new Font("Gulim", Font.PLAIN, 30));
 				playerName.setFont(new Font("Gulim", Font.PLAIN, 30));
-				TurnNum.setBounds(650, 0, 200,150);
-				playerName.setBounds(650, 50, 200,150);
+				TurnNum.setBounds(650, 100, 200,150);
+				playerName.setBounds(550, 150, 400,150);
 				TurnNum.setHorizontalAlignment(SwingConstants.CENTER);
 				playerName.setHorizontalAlignment(SwingConstants.CENTER);
 
 				c.add(TurnNum);
 				c.add(playerName);
-//				Functions.showSimpleCard(GameSource.player[0], c);
 				for (int i = 0; i < Buttons.length; i++) {
 					Buttons[i].addActionListener(listener);
-					Buttons[i].setBounds(300*i+200,700,200, 200);
+					Buttons[i].setBounds(300*i+200,500,200, 200);
 					Buttons[i].setFont(new Font("Gulim",Font.PLAIN,30));
 					c.add(Buttons[i]);
 				}
@@ -239,9 +238,8 @@ public class GameFlow {
 
 				public InsertCard(Player[] player) {
 					setTitle("Insert");
-					setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					Container c = getContentPane();
-					c.setLayout(new FlowLayout());
+					c.setLayout(new GridLayout(3,2,0,30));
 					cardListener listener1 = new cardListener();
 
 					characters.addActionListener(listener1);
@@ -290,6 +288,21 @@ public class GameFlow {
 							}
 						}
 					});
+					
+					j1.setBounds(150,0,100,100);
+					j2.setBounds(350,0,100,100);
+					characters.setBounds(150,150,80,10);
+					numbers.setBounds(350,150,80,10);
+					button1.setBounds(150, 400, 90, 60);
+					button2.setBounds(350, 400, 90, 60);
+					j1.setHorizontalAlignment(SwingConstants.CENTER);
+					j2.setHorizontalAlignment(SwingConstants.CENTER);
+					characters.setAlignmentX(SwingConstants.CENTER);
+					numbers.setAlignmentX(SwingConstants.CENTER);
+					j1.setFont(new Font("Gulim",Font.PLAIN,20));
+					j2.setFont(new Font("Gulim",Font.PLAIN,20));
+					button1.setFont(new Font("Gulim",Font.PLAIN,20));
+					button2.setFont(new Font("Gulim",Font.PLAIN,20));
 
 					c.add(j1);
 					c.add(j2);
@@ -298,7 +311,7 @@ public class GameFlow {
 					c.add(button1);
 					c.add(button2);
 
-					setSize(900, 600);
+					setSize(400, 300);
 					setVisible(true);
 				}
 
@@ -317,12 +330,10 @@ public class GameFlow {
 
 			public static class CombinationCase extends JFrame {
 				JLabel arrow = new JLabel("->");
-				JTextArea probability = new JTextArea();
 				public CombinationCase() {
 					setTitle("Cases");
 					Container c = getContentPane();
-					c.setLayout(new FlowLayout()
-							);
+					c.setLayout(new FlowLayout());
 					
 					JTextArea text = new JTextArea(" 로열 스트레이트 플러쉬: "+GameSource.player[GameSource.playeridx].myComb.RoyalFlush
 						+ "\n 스트레이트 플러쉬: "+GameSource.player[GameSource.playeridx].myComb.StraightFlush
@@ -334,11 +345,10 @@ public class GameFlow {
 						+ "\n 투 페어: "+GameSource.player[GameSource.playeridx].myComb.TwoPair
 						+ "\n 원 페어: "+GameSource.player[GameSource.playeridx].myComb.OnePair
 						+ "\n 하이 카드: "+GameSource.player[GameSource.playeridx].myComb.HighCard);
-					text.setFont(new Font("Gulim", Font.PLAIN, 15));
+					text.setFont(new Font("Gulim", Font.PLAIN, 20));
 					text.setEditable(false);
-					probability.setFont(new Font("Gulim", Font.PLAIN, 15));
-					probability.setEditable(false);
-					probability.setText(" 로열 스트레이트 플러쉬: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.RoyalFlush)
+					
+					JTextArea probability=new JTextArea(" 로열 스트레이트 플러쉬: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.RoyalFlush)
 							+ "%\n 스트레이트 플러쉬: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.StraightFlush)
 							+ "%\n 포카드: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.FourCard)
 							+ "%\n 풀하우스: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.FullHouse)
@@ -348,12 +358,16 @@ public class GameFlow {
 							+ "%\n 투 페어: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.TwoPair)
 							+ "%\n 원 페어: "+Functions.probability(GameSource.player[GameSource.playeridx].myComb.OnePair)
 							+"%");
+					probability.setFont(new Font("Gulim", Font.PLAIN, 20));
+					probability.setEditable(false);
+					
+					arrow.setFont(new Font("Gulim",Font.PLAIN,30));
 					
 					c.add(text);
 					c.add(arrow);
 					c.add(probability);
 					
-					setSize(900, 600);
+					setSize(900, 300);
 					setVisible(true);
 				}
 			}
@@ -363,7 +377,7 @@ public class GameFlow {
 				public TotalStats() {
 					setTitle("Stats");
 					Container c = getContentPane();
-					c.setLayout(new FlowLayout());
+					c.setLayout(new GridLayout(1,GameSource.player.length,10,0));
 					
 					for(int i=0; i<GameSource.player.length;i++) {
 						if(i==0) {
@@ -371,12 +385,12 @@ public class GameFlow {
 						}else {
 							playerStats[i]=new JTextArea("[다른 플레이어"+i+"]\n"+GameSource.player[i].Stats());
 						}
-						playerStats[i].setFont(new Font("Gulim", Font.PLAIN, 15));
+						playerStats[i].setFont(new Font("Gulim", Font.PLAIN, 19));
 						playerStats[i].setEditable(false);
 						c.add(playerStats[i]);
 					}
 
-					setSize(900, 600);
+					setSize(1200, 800);
 					setVisible(true);
 				}
 			}

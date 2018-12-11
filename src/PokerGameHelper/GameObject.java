@@ -13,33 +13,18 @@ class Player {
 	}
 	
 	String Stats() {
-		String isDeadString;
+		String isDeadString;	// Player의 생존 유무를 표시
 		if (isDead == false)
-			isDeadString="alive";
+			isDeadString="Alive";
 		else
-			isDeadString="dead";
-		String result="";
+			isDeadString="Dead";
+		String result=isDeadString+"\n";
 		for (int i = 0; i < cardDeck.length; i++) {
 			if (cardDeck[i] != null) {
 				result+=(cardDeck[i].toString()+"\n");
-			}
+			}	// Player의 카드 덱을 표시
 		}
 		return result;
-	}
-	
-	void showStats() {
-		System.out.print("Player Status: "); // Player의 생존 유무를 표시
-		if (isDead == false)
-			System.out.println("alive");
-		else
-			System.out.println("dead");
-
-		System.out.println("<Card lists>"); // Player의 카드 덱을 표시
-		for (int i = 0; i < cardDeck.length; i++) {
-			if (cardDeck[i] != null) {
-				System.out.println(cardDeck[i].toString());
-			}
-		}
 	}
 }
 
