@@ -89,8 +89,7 @@ class Card implements Comparable<Card>{
 			return true;
 		else
 		return false;
-	}
-	
+	}	
 }
 
 class CardCombination {
