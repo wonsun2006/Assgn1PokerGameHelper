@@ -69,11 +69,15 @@ public class GameFlow {
 				setTitle("Explanation");
 				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				Container c = getContentPane();
-				c.setLayout(new FlowLayout());
+				c.setLayout(null);
 				ExplanationButtonListener listener = new ExplanationButtonListener();
 
 				button1.addActionListener(listener);
 				button2.addActionListener(listener);
+				button1.setSize(200,200);
+				button2.setSize(200,200);
+				button1.setLocation(500, 400);
+				button2.setLocation(800, 400);
 
 				c.add(button1);
 				c.add(button2);
@@ -110,7 +114,7 @@ public class GameFlow {
 
 					c.add(jarea);
 
-					setSize(1500, 1000);
+					setSize(900, 600);
 					setVisible(true);
 				}
 			}
@@ -131,7 +135,7 @@ public class GameFlow {
 
 					c.add(jarea);
 
-					setSize(1500, 1000);
+					setSize(900, 600);
 					setVisible(true);
 				}
 			}
@@ -147,17 +151,26 @@ public class GameFlow {
 				setTitle("Game");
 				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				Container c = getContentPane();
-				c.setLayout(new FlowLayout());
+				c.setLayout(null);
 				GameButtonsListener listener = new GameButtonsListener();
 
 				Functions.GameSet();
 				Functions.PlayerSet(number);
+				
+				TurnNum.setFont(new Font("Gulim", Font.PLAIN, 30));
+				playerName.setFont(new Font("Gulim", Font.PLAIN, 30));
+				TurnNum.setBounds(650, 0, 200,150);
+				playerName.setBounds(650, 50, 200,150);
+				TurnNum.setHorizontalAlignment(SwingConstants.CENTER);
+				playerName.setHorizontalAlignment(SwingConstants.CENTER);
 
 				c.add(TurnNum);
 				c.add(playerName);
 //				Functions.showSimpleCard(GameSource.player[0], c);
 				for (int i = 0; i < Buttons.length; i++) {
 					Buttons[i].addActionListener(listener);
+					Buttons[i].setBounds(300*i+200,700,200, 200);
+					Buttons[i].setFont(new Font("Gulim",Font.PLAIN,30));
 					c.add(Buttons[i]);
 				}
 
