@@ -390,7 +390,9 @@ public class Functions {
 					if(PairCase[i].need<=0 && PairCase[j].need<=0) {
 						player.myComb.TwoPair="Exists";
 						return;
-					}else if(GameSource.leftDraw>=PairCase[i].need+PairCase[j].need) {
+					}else if(GameSource.leftDraw>=PairCase[i].need+PairCase[j].need
+							&&PairCase[i].available>=PairCase[i].need
+							&&PairCase[j].available>=PairCase[j].need) {
 						totalNum+=Combination(PairCase[i].available,PairCase[i].need)
 								*Combination(PairCase[j].available, PairCase[j].need)
 								*Combination(countLeftDeck()-PairCase[i].need-PairCase[j].need, GameSource.leftDraw-PairCase[i].need-PairCase[j].need);
@@ -410,7 +412,8 @@ public class Functions {
 			if(PairCase[i].need<=0) {
 				player.myComb.OnePair="Exists";
 				return;
-			}else if(PairCase[i].need<=GameSource.leftDraw) {
+			}else if(PairCase[i].need<=GameSource.leftDraw
+					&&PairCase[i].available>=PairCase[i].need) {
 				totalNum+=Combination(PairCase[i].available, PairCase[i].need)
 						*Combination(countLeftDeck()-PairCase[i].need, GameSource.leftDraw-PairCase[i].need);
 			}

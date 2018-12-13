@@ -197,7 +197,7 @@ public class GameFlow {
 							System.exit(0);
 						}else {
 							do {
-								if(GameSource.DeadPlayer>=GameSource.player.length-1&&GameSource.player.length!=1) {
+								if(GameSource.DeadPlayer>=GameSource.player.length-1) {
 									JOptionPane.showMessageDialog(null, "게임이 종료되었습니다.", "Message", NORMAL);
 									System.exit(0);
 								}
